@@ -724,10 +724,10 @@ def threebody_ode_vf_sa(y,t,
 
 
     #if the properties of the bodies are changing
-    #if (dradius0_dt is not None) & (np.isfinite(dradius0_dt)):
-    #    diffeq_list += [dR0_dt]
-    #if (dradius1_dt is not None) & (np.isfinite(dradius1_dt)):
-    #    diffeq_list += [dR1_dt]       
+    if (dradius0_dt is not None) & (np.isfinite(dradius0_dt)):
+        diffeq_list += [dR0_dt]
+    if (dradius1_dt is not None) & (np.isfinite(dradius1_dt)):
+        diffeq_list += [dR1_dt]       
     
 
     return diffeq_list

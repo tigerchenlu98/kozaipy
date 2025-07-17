@@ -789,10 +789,10 @@ def threebody_ode_vf_full(t,y,m0,m1,m2,
 
     # Confused why this is commented out?? As it stands right now, dR0_dt is being set and not doing anything after...
     #if the properties of the bodies are changing
-    #if (dradius0_dt is not None) & (np.isfinite(dradius0_dt)):
-    #    diffeq_list += [dR0_dt]
-    #if (dradius1_dt is not None) & (np.isfinite(dradius1_dt)):
-    #    diffeq_list += [dR1_dt]       
+    if (dradius0_dt is not None) & (np.isfinite(dradius0_dt)):
+        diffeq_list += [dR0_dt]
+    if (dradius1_dt is not None) & (np.isfinite(dradius1_dt)):
+        diffeq_list += [dR1_dt]       
     
 
     return diffeq_list
