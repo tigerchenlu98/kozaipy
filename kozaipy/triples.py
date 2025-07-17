@@ -127,6 +127,7 @@ class Body(object):
         self.tidal_lag_time = kwargs.get("tidal_lag_time")
 
         self.dradius_dt = kwargs.get("dradius_dt")
+        self.dmass_dt= kwargs.get("dmass_dt")
         self.dgyroradius_dt = kwargs.get("dgyroradius_dt")
         
         # Set defaults
@@ -707,6 +708,8 @@ class Triple(object):
         # Time derivatives
         self.properties0.dradius_dt = kwargs.get("dR0dt")
         self.properties1.dradius_dt = kwargs.get("dR1dt")
+        self.properties0.dradius_dt = kwargs.get("dm0dt")
+        self.properties1.dradius_dt = kwargs.get("dm1dt")
         self.properties0.dgyroradius_dt = kwargs.get("drg0dt")
         self.properties1.dgyroradius_dt = kwargs.get("drg1dt")
             

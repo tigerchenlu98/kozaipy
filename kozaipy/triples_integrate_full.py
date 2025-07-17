@@ -12,6 +12,7 @@ def threebody_ode_vf_full(t,y,m0,m1,m2,
                           tauconv0, tauconv1,
                           tlag0, tlag1,
                           dradius0_dt,dradius1_dt,
+                          dmass0_dt,dmass1_dt,
                           dgyroradius0_dt, dgyroradius1_dt,
                           octupole,
                           extra_forces_conservative,
@@ -111,6 +112,33 @@ def threebody_ode_vf_full(t,y,m0,m1,m2,
             dR1_dt = dradius1_dt(t)
         else:
             dR1_dt = dradius1_dt
+    
+    # mass
+    if (m0 is not None):
+        if callable(m0):
+            m0 = mass0(t)
+        else:
+            m0 = m0
+
+    if (m1 is not None):
+        if callable(m1):
+            m1 = mass1(t)
+        else:
+            m1 = m1
+
+
+    if (dmass0_dt is not None):
+        if callable(dmass0_dt):
+            dm0_dt = dmass0_dt(t)
+        else:
+            dm0_dt = dmass0_dt
+            
+            
+    if (dmass1_dt is not None):
+        if callable(dmass1_dt):
+            dm1_dt = dmass1_dt(t)
+        else:
+            dm1_dt = dmass1_dt
 
     # gyroradii
     if (gyroradius0 is not None):
@@ -759,7 +787,7 @@ def threebody_ode_vf_full(t,y,m0,m1,m2,
                     diffeq_list += [dOmega1_dt]
 
 
-
+    # Confused why this is commented out?? As it stands right now, dR0_dt is being set and not doing anything after...
     #if the properties of the bodies are changing
     #if (dradius0_dt is not None) & (np.isfinite(dradius0_dt)):
     #    diffeq_list += [dR0_dt]
@@ -779,6 +807,7 @@ def threebody_ode_vf_full_modified(t,y,m0,m1,m2,
                                    tauconv0, tauconv1,
                                    tlag0, tlag1,
                                    dradius0_dt,dradius1_dt,
+                                   dmass0_dt,dmass1_dt,
                                    dgyroradius0_dt, dgyroradius1_dt,
                                    octupole,
                                    extra_forces_conservative,
@@ -794,6 +823,7 @@ def threebody_ode_vf_full_modified(t,y,m0,m1,m2,
                                  tauconv0, tauconv1,
                                  tlag0, tlag1,
                                  dradius0_dt,dradius1_dt,
+                                 dmass0_dt,dmass1_dt,
                                  dgyroradius0_dt, dgyroradius1_dt,
                                  octupole,
                                  extra_forces_conservative,

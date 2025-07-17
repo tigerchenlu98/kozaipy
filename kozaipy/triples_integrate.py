@@ -59,6 +59,7 @@ def integrate_triple_system(ics,timemin,timemax,Nevals,
     m0,m1,m2 = body0.mass, body1.mass, body2.mass
     radius0, radius1 = body0.radius, body1.radius
     dradius0_dt, dradius1_dt = body0.dradius_dt, body1.dradius_dt
+    dmass0_dt, dmass1_dt = body0.dmass_dt, body1.dmass_dt
     gyroradius0, gyroradius1 = body0.gyroradius, body1.gyroradius
     dgyroradius0_dt, dgyroradius1_dt = body0.dgyroradius_dt, body1.dgyroradius_dt
     k2_0, k2_1 = body0.apsidal_constant, body1.apsidal_constant
@@ -82,6 +83,7 @@ def integrate_triple_system(ics,timemin,timemax,Nevals,
              tv0,tv1,tauconv0,tauconv1,\
              tlag0,tlag1,\
              dradius0_dt, dradius1_dt,\
+             dmass0_dt, dmass1_dt,\
              dgyroradius0_dt, dgyroradius1_dt,\
              octupole_potential,\
              short_range_forces_conservative,short_range_forces_dissipative,solve_for_spin_vector    
@@ -155,6 +157,7 @@ def integrate_triple_system_sa(ics,timemin,timemax,Nevals,
     m0,m1,m2 = body0.mass, body1.mass, body2.mass
     radius0, radius1 = body0.radius, body1.radius
     dradius0_dt, dradius1_dt = body0.dradius_dt, body1.dradius_dt
+    dmass0_dt, dmass1_dt = body0.dmass_dt, body1.dmass_dt
     gyroradius0, gyroradius1 = body0.gyroradius, body1.gyroradius
     dgyroradius0_dt, dgyroradius1_dt = body0.dgyroradius_dt, body1.dgyroradius_dt
     k2_0, k2_1 = body0.apsidal_constant, body1.apsidal_constant
@@ -172,6 +175,7 @@ def integrate_triple_system_sa(ics,timemin,timemax,Nevals,
              tv0,tv1,tauconv0,tauconv1,\
              tlag0,tlag1,\
              dradius0_dt, dradius1_dt,\
+             dmass0_dt, dmass1_dt,\
              dgyroradius0_dt, dgyroradius1_dt,\
              octupole_potential,\
              short_range_forces_conservative,short_range_forces_dissipative,solve_for_spin_vector    
