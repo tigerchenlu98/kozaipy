@@ -11,12 +11,16 @@ if __name__ == "__main__":
     rp_0 = 0.2 * kp.constants.Rsun
     coeff =  (5.0-n)*1.0/3 * 24 * np.pi * kp.constants.stefan * Teff**4/kp.constants.G/mp/mp * rp_0 * rp_0 * rp_0
 
+    tau = -1e4*365.25
+
     def planetradius_function(t):
-        return rp_0 / (1 + coeff * t)**(1.0/3)
+        #return rp_0 / (1 + coeff * t)**(1.0/3)
+        return rp_0 * np.exp(t/tau)
 
 
     def  dplanetradius_dt_function(t):
-        return -rp_0 / 3 / (1 + coeff * t)**(4.0/3) * coeff 
+        #return -rp_0 / 3 / (1 + coeff * t)**(4.0/3) * coeff 
+        return rp_0/tau * np.exp(t/tau)
 
 
 
@@ -29,14 +33,14 @@ if __name__ == "__main__":
     shrinkingplanet = kp.Body(mass=mp,radius=planetradius_function,
                               dradius_dt=dplanetradius_dt_function,
                               apsidal_constant=0.255,viscous_time=0.365242,gyroradius=0.25,mass_type='planet')
+
     star = kp.Body(mass=trip0.m0, radius = kp.constants.Rsun,
                    apsidal_constant=0.014,tidal_lag_time=1.0e-8*365.25,gyroradius=0.08,mass_type='star')
-    
     
     trip0.properties0 = star
     trip0.properties1 = shrinkingplanet
     
-    sol = trip0.integrate(timemin=0,timemax=1.0e8*365.25,Nevals=100000,\
+    sol = trip0.integrate(timemin=0,timemax=1.0e4*365.25,Nevals=1000,\
                           octupole_potential=False,\
                           short_range_forces_conservative=True, \
                           short_range_forces_dissipative=True,\
@@ -52,6 +56,8 @@ if __name__ == "__main__":
     incl1 = sol.elementdata.I1
     incl2 = sol.elementdata.I2
     a1 = sol.elementdata.a1
+    R1 = sol.vectordata.R1
+
     try:
         spin_period0 = 2*np.pi/np.sqrt(sol.vectordata.Omega0x**2 + sol.vectordata.Omega0y**2 +sol.vectordata.Omega0z**2)
     except TypeError:
@@ -95,17 +101,20 @@ if __name__ == "__main__":
 
  #
     ax = fig.add_subplot(325)    
-    ax.plot(time/365.25,spin_period0)
+    #ax.plot(time/365.25,spin_period0)
     f2 = 1 + 7.5 * ecc1**2 + 5.625 * ecc1**4 + 0.3125 * ecc1**6
     f5 = 1 + 3.0 * ecc1**2 + 0.375 * ecc1**4
     orbital_period1= 2*np.pi/np.sqrt(kp.constants.G*(trip0.m0+trip0.m1)/a1**3)
     spin_period1_ps =  orbital_period1/(f2/f5/(1-ecc1**2)**1.5)
-    ax.plot(time/365.25,spin_period1)
-    ax.plot(time/365.25,orbital_period1,'k--')
+    #ax.plot(time/365.25,spin_period1)
+    #ax.plot(time/365.25,orbital_period1,'k--')
+
+    ax.plot(time/365.25,R1, marker='.', color='red', ls=' ')
+    ax.plot(time/365.25,planetradius_function(time), color='blue')
     ax.set_xlabel('time[yr]',size=20)
-    ax.set_ylabel('spin period',size=20)
-    ax.set_yscale('log')
-    ax.set_ylim(0,25)
+    ax.set_ylabel('radius',size=20)
+#    ax.set_yscale('log')
+    #ax.set_ylim(0,25)
     
     fig.savefig('kctf_contracting_planet.pdf')
 

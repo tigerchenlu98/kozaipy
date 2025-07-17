@@ -78,7 +78,9 @@ element_keys = {"a1": 0,
                 "Omega1": 15,
                 "Omega1x": 16,
                 "Omega1y": 17,
-                "Omega1z": 18
+                "Omega1z": 18,
+                "R0": 19,
+                "R1": 20
 }
 
 
@@ -182,8 +184,8 @@ class VectorData(object):
         # radius and mass evolution
 #        self.m0 = kwargs.get("m0")
 #        self.m1 = kwargs.get("m1")
-#        self.R0 = kwargs.get("R0")
-#        self.R1 = kwargs.get("R1")
+        self.R0 = kwargs.get("R0")
+        self.R1 = kwargs.get("R1")
         
 class ElementData(object):
     def __init__(self,*args,**kwargs):
@@ -263,6 +265,9 @@ class TripleSolution(object):
         self.vectordata.l2x = kwargs.get("l2x")
         self.vectordata.l2y = kwargs.get("l2y")
         self.vectordata.l2z = kwargs.get("l2z")
+        
+        self.vectordata.R0 = kwargs.get("R0")
+        self.vectordata.R1 = kwargs.get("R1")
 
 
         if (vector_solution is not None):
@@ -384,6 +389,11 @@ class TripleSolution(object):
             self.elementdata.Omega1y = self.vectordata.Omega1y
         if (self.vectordata.Omega1z is not None):
             self.elementdata.Omega1z = self.vectordata.Omega1z
+        
+        if (self.vectordata.R0 is not None):
+            self.elementdata.R0 = self.vectordata.R0
+        if (self.vectordata.R1 is not None):
+            self.elementdata.R1 = self.vectordata.R1
             
     def add_body_properties(self, body_index, quantity):
 
@@ -504,6 +514,12 @@ class TripleSolution(object):
                     if ('Omega' in k):
                         fmt_list.append('%12.6f  ')
                         index_list.append(element_keys[k])
+                    if (k == 'R0'):
+                        fmt_list.append('%12.8f  ')
+                        index_list.append(element_keys['R0'])
+                    if (k == 'R1'):
+                        fmt_list.append('%12.8f  ')
+                        index_list.append(element_keys['R1'])
                     head_list.append(k+"\t\t")
                     data = np.column_stack((data,v))
         else:
@@ -587,12 +603,12 @@ class TripleSolution(object):
 #                        if (k == 'm1'):
 #                            fmt_list.append('%10.6f  ')
 #                            index_list.append(triple_keys['m1'])
-#                        if (k == 'R0'):
-#                            fmt_list.append('%10.6f  ')
-#                            index_list.append(triple_keys['R0'])
-#                        if (k == 'R1'):
-#                            fmt_list.append('%10.6f  ')
-#                            index_list.append(triple_keys['R1'])
+                        if (k == 'R0'):
+                            fmt_list.append('%10.6f  ')
+                            index_list.append(triple_keys['R0'])
+                        if (k == 'R1'):
+                            fmt_list.append('%10.6f  ')
+                            index_list.append(triple_keys['R1'])
 
                     if (k in triple_derivative_keys):
                         if (triple_derivative_keys[k] is None):
@@ -907,13 +923,13 @@ class Triple(object):
 
         if (self.properties0.dradius_dt is not None):
             if (self.properties0.dradius_dt(0) != 0):
-                vector += [self.properties0.dradius_dt(0)]
+                vector += [self.properties0.radius(0)]
                 triple_keys['R0'] = jj 
                 jj+=1
             
         if (self.properties1.dradius_dt is not None):
             if (self.properties1.dradius_dt(0) != 0):
-                vector += [self.properties1.dradius_dt(0)]
+                vector += [self.properties1.radius(0)]
                 triple_keys['R1'] = jj 
                 jj+=1
         
@@ -938,8 +954,9 @@ class Triple(object):
         """
 
         #self.check_validity_bodies()
-        print(self.Omega0)
+        #print(self.Omega0)
         vector_ics = self.set_ics(spin_vector=solve_for_spin_vector)
+        print(vector_ics)
 
         
         solution = integrate_triple_system(vector_ics,timemin,timemax,Nevals,
