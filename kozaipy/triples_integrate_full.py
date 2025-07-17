@@ -1,5 +1,6 @@
 from math import sqrt, pi,log10
 from numpy import inf
+import numpy as np
 import scipy.integrate as integ
 import kozaipy.triples as triples
 #import bsint
@@ -12,7 +13,7 @@ def threebody_ode_vf_full(t,y,m0,m1,m2,
                           tauconv0, tauconv1,
                           tlag0, tlag1,
                           dradius0_dt,dradius1_dt,
-                          dmass0_dt,dmass1_dt,
+#                          dmass0_dt,dmass1_dt,
                           dgyroradius0_dt, dgyroradius1_dt,
                           octupole,
                           extra_forces_conservative,
@@ -113,32 +114,32 @@ def threebody_ode_vf_full(t,y,m0,m1,m2,
         else:
             dR1_dt = dradius1_dt
     
-    # mass
-    if (m0 is not None):
-        if callable(m0):
-            m0 = mass0(t)
-        else:
-            m0 = m0
+#    # mass
+#    if (m0 is not None):
+#        if callable(m0):
+#            m0 = mass0(t)
+#        else:
+#            m0 = m0
 
-    if (m1 is not None):
-        if callable(m1):
-            m1 = mass1(t)
-        else:
-            m1 = m1
+#    if (m1 is not None):
+#        if callable(m1):
+#            m1 = mass1(t)
+#        else:
+#            m1 = m1
 
 
-    if (dmass0_dt is not None):
-        if callable(dmass0_dt):
-            dm0_dt = dmass0_dt(t)
-        else:
-            dm0_dt = dmass0_dt
+ #   if (dmass0_dt is not None):
+ #       if callable(dmass0_dt):
+ #           dm0_dt = dmass0_dt(t)
+ #       else:
+ #           dm0_dt = dmass0_dt
             
             
-    if (dmass1_dt is not None):
-        if callable(dmass1_dt):
-            dm1_dt = dmass1_dt(t)
-        else:
-            dm1_dt = dmass1_dt
+ #   if (dmass1_dt is not None):
+ #       if callable(dmass1_dt):
+ #           dm1_dt = dmass1_dt(t)
+ #       else:
+ #           dm1_dt = dmass1_dt
 
     # gyroradii
     if (gyroradius0 is not None):
@@ -789,9 +790,9 @@ def threebody_ode_vf_full(t,y,m0,m1,m2,
 
     # Confused why this is commented out?? As it stands right now, dR0_dt is being set and not doing anything after...
     #if the properties of the bodies are changing
-    if (dradius0_dt is not None) & (np.isfinite(dradius0_dt)):
+    if (dradius0_dt is not None):# & (np.isfinite(dradius0_dt)):
         diffeq_list += [dR0_dt]
-    if (dradius1_dt is not None) & (np.isfinite(dradius1_dt)):
+    if (dradius1_dt is not None):# & (np.isfinite(dradius1_dt)):
         diffeq_list += [dR1_dt]       
     
 
@@ -807,7 +808,7 @@ def threebody_ode_vf_full_modified(t,y,m0,m1,m2,
                                    tauconv0, tauconv1,
                                    tlag0, tlag1,
                                    dradius0_dt,dradius1_dt,
-                                   dmass0_dt,dmass1_dt,
+#                                   dmass0_dt,dmass1_dt,
                                    dgyroradius0_dt, dgyroradius1_dt,
                                    octupole,
                                    extra_forces_conservative,
@@ -823,7 +824,7 @@ def threebody_ode_vf_full_modified(t,y,m0,m1,m2,
                                  tauconv0, tauconv1,
                                  tlag0, tlag1,
                                  dradius0_dt,dradius1_dt,
-                                 dmass0_dt,dmass1_dt,
+ #                                dmass0_dt,dmass1_dt,
                                  dgyroradius0_dt, dgyroradius1_dt,
                                  octupole,
                                  extra_forces_conservative,

@@ -127,7 +127,7 @@ class Body(object):
         self.tidal_lag_time = kwargs.get("tidal_lag_time")
 
         self.dradius_dt = kwargs.get("dradius_dt")
-        self.dmass_dt= kwargs.get("dmass_dt")
+#        self.dmass_dt= kwargs.get("dmass_dt")
         self.dgyroradius_dt = kwargs.get("dgyroradius_dt")
         
         # Set defaults
@@ -180,10 +180,10 @@ class VectorData(object):
         self.dl2z_dt = None 
 
         # radius and mass evolution
-        self.m0 = kwargs.get("m0")
-        self.m1 = kwargs.get("m1")
-        self.R0 = kwargs.get("R0")
-        self.R1 = kwargs.get("R1")
+#        self.m0 = kwargs.get("m0")
+#        self.m1 = kwargs.get("m1")
+#        self.R0 = kwargs.get("R0")
+#        self.R1 = kwargs.get("R1")
         
 class ElementData(object):
     def __init__(self,*args,**kwargs):
@@ -581,18 +581,18 @@ class TripleSolution(object):
                         if (k == 'Omega1z'):
                             fmt_list.append('%10.6f  ')
                             index_list.append(triple_keys['Omega1z'])
-                        if (k == 'm0'):
-                            fmt_list.append('%10.6f  ')
-                            index_list.append(triple_keys['m0'])
-                        if (k == 'm1'):
-                            fmt_list.append('%10.6f  ')
-                            index_list.append(triple_keys['m1'])
-                        if (k == 'R0'):
-                            fmt_list.append('%10.6f  ')
-                            index_list.append(triple_keys['R0'])
-                        if (k == 'R1'):
-                            fmt_list.append('%10.6f  ')
-                            index_list.append(triple_keys['R1'])
+#                        if (k == 'm0'):
+#                            fmt_list.append('%10.6f  ')
+#                            index_list.append(triple_keys['m0'])
+#                        if (k == 'm1'):
+#                            fmt_list.append('%10.6f  ')
+#                            index_list.append(triple_keys['m1'])
+#                        if (k == 'R0'):
+#                            fmt_list.append('%10.6f  ')
+#                            index_list.append(triple_keys['R0'])
+#                        if (k == 'R1'):
+#                            fmt_list.append('%10.6f  ')
+#                            index_list.append(triple_keys['R1'])
 
                     if (k in triple_derivative_keys):
                         if (triple_derivative_keys[k] is None):
@@ -726,8 +726,8 @@ class Triple(object):
         # Time derivatives
         self.properties0.dradius_dt = kwargs.get("dR0dt")
         self.properties1.dradius_dt = kwargs.get("dR1dt")
-        self.properties0.dradius_dt = kwargs.get("dm0dt")
-        self.properties1.dradius_dt = kwargs.get("dm1dt")
+#        self.properties0.dradius_dt = kwargs.get("dm0dt")
+#        self.properties1.dradius_dt = kwargs.get("dm1dt")
         self.properties0.dgyroradius_dt = kwargs.get("drg0dt")
         self.properties1.dgyroradius_dt = kwargs.get("drg1dt")
             
@@ -905,13 +905,13 @@ class Triple(object):
             else: 
                 triple_data['pseudosynch1'] = True
 
-        #if (self.properties0.dradius_dt is not None):
+        if (self.properties0.dradius_dt is not None):
             if (self.properties0.dradius_dt(0) != 0):
                 vector += [self.properties0.dradius_dt(0)]
                 triple_keys['R0'] = jj 
                 jj+=1
             
-        #if (self.properties1.dradius_dt is not None):
+        if (self.properties1.dradius_dt is not None):
             if (self.properties1.dradius_dt(0) != 0):
                 vector += [self.properties1.dradius_dt(0)]
                 triple_keys['R1'] = jj 
