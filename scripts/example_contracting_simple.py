@@ -11,16 +11,16 @@ if __name__ == "__main__":
     rp_0 = 0.2 * kp.constants.Rsun
     coeff =  (5.0-n)*1.0/3 * 24 * np.pi * kp.constants.stefan * Teff**4/kp.constants.G/mp/mp * rp_0 * rp_0 * rp_0
 
-    tau = -1e4*365.25
+    tau = -1e4*3*365.25
 
-    def planetradius_function(t):
+    def planetmass_function(t):
         #return rp_0 / (1 + coeff * t)**(1.0/3)
-        return rp_0 * np.exp(t/tau)
+        return mp * np.exp(t/tau)
 
 
-    def  dplanetradius_dt_function(t):
+    def  dplanetmass_dt_function(t):
         #return -rp_0 / 3 / (1 + coeff * t)**(4.0/3) * coeff 
-        return rp_0/tau * np.exp(t/tau)
+        return mp/tau * np.exp(t/tau)
 
 
 
@@ -30,8 +30,8 @@ if __name__ == "__main__":
                       spinorbit_align1=True,\
                       spin_rate0 = 2 * np.pi/20, spin_rate1 = 2 * np.pi/0.417)
     
-    shrinkingplanet = kp.Body(mass=mp,radius=planetradius_function,
-                              dradius_dt=dplanetradius_dt_function,
+    shrinkingplanet = kp.Body(mass=planetmass_function,radius=rp_0,
+                              dmass_dt=dplanetmass_dt_function,
                               apsidal_constant=0.255,viscous_time=0.365242,gyroradius=0.25,mass_type='planet')
 
     star = kp.Body(mass=trip0.m0, radius = kp.constants.Rsun,
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     trip0.properties0 = star
     trip0.properties1 = shrinkingplanet
     
-    sol = trip0.integrate(timemin=0,timemax=1.0e4*365.25,Nevals=1000,\
+    sol = trip0.integrate(timemin=0,timemax=1.0e4*365.25,Nevals=100,\
                           octupole_potential=False,\
                           short_range_forces_conservative=True, \
                           short_range_forces_dissipative=True,\
@@ -57,6 +57,7 @@ if __name__ == "__main__":
     incl2 = sol.elementdata.I2
     a1 = sol.elementdata.a1
     R1 = sol.vectordata.R1
+    m1 = sol.vectordata.m1
 
     try:
         spin_period0 = 2*np.pi/np.sqrt(sol.vectordata.Omega0x**2 + sol.vectordata.Omega0y**2 +sol.vectordata.Omega0z**2)
@@ -109,10 +110,11 @@ if __name__ == "__main__":
     #ax.plot(time/365.25,spin_period1)
     #ax.plot(time/365.25,orbital_period1,'k--')
 
-    ax.plot(time/365.25,R1, marker='.', color='red', ls=' ')
-    ax.plot(time/365.25,planetradius_function(time), color='blue')
+    ax.plot(time/365.25,m1, marker='.', color='red', ls=' ', label = 'KozaiPy')
+    ax.plot(time/365.25,planetmass_function(time), color='blue', label = 'Analytic Prediction')
     ax.set_xlabel('time[yr]',size=20)
-    ax.set_ylabel('radius',size=20)
+    ax.set_ylabel('Planet mass (mSun)',size=20)
+    ax.legend()
 #    ax.set_yscale('log')
     #ax.set_ylim(0,25)
     
